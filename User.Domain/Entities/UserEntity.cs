@@ -9,9 +9,9 @@ public class UserEntity: AggregateRoot
     public string Email { get; set; }
     public int YearOld { get; set; }
     public string CustomerDocument { get; set; }
-    public int PhoneNumber { get; set; }
+    public string PhoneNumber { get; set; }
 
-    public UserEntity(string name, string email, int yearOld, string customerDocument, int phoneNumber)
+    public UserEntity(string name, string email, int yearOld, string customerDocument, string phoneNumber)
     {
         Id = Guid.NewGuid();
         Name = name;
@@ -23,7 +23,7 @@ public class UserEntity: AggregateRoot
         Validate();
     }
     
-    public void Update(string name, string email, int yearOld, string customerDocument, int phoneNumber)
+    public void Update(string name, string email, int yearOld, string customerDocument, string phoneNumber)
     {
         Name = name;
         Email = email;
@@ -53,7 +53,7 @@ public class UserEntity: AggregateRoot
         if (string.IsNullOrEmpty(CustomerDocument))
             throw new ArgumentException("CustomerDocument is required");
         
-        if (PhoneNumber <= 0)
+        if (PhoneNumber.Length <= 0)
             throw new ArgumentException("PhoneNumber is required");
     }
 }
