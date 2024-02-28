@@ -24,8 +24,10 @@ public class UserRepositoryTests
     [Fact]
     public async Task Insert_ShouldAddUserCorrectly()
     {
+        var cancellationToken = new CancellationToken();
         var user = new UserEntity(Faker.NameFaker.FirstName(), Faker.InternetFaker.Email(), Faker.NumberFaker.Number(),Faker.StringFaker.Numeric(11).ToString(), Faker.PhoneFaker.Phone());
-        await _repository.Insert(user, new CancellationToken());
+        await _repository.Insert(user, cancellationToken);
+        await _context.SaveChangesAsync(cancellationToken);
 
         var userInDb = await _context.User.FirstOrDefaultAsync(u => u.Email == user.Email);
         
@@ -40,9 +42,10 @@ public class UserRepositoryTests
         
         _context.User.Add(new UserEntity(fakerName, Faker.InternetFaker.Email(), Faker.NumberFaker.Number(),Faker.StringFaker.Numeric(11).ToString(), Faker.PhoneFaker.Phone()));
         _context.User.Add(new UserEntity(fakerName, Faker.InternetFaker.Email(), Faker.NumberFaker.Number(),Faker.StringFaker.Numeric(11).ToString(), Faker.PhoneFaker.Phone()));
+        
         await _context.SaveChangesAsync();
 
         var users = await _repository.GetWhere(u => u.Name.Contains(fakerName), new CancellationToken());
-        Assert.Equal(users.Count, 2);
+        Assert.Equal(2, users.Count);
     }
 }
